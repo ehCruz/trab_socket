@@ -9,12 +9,17 @@ public class CalculadoraCliente {
     private String ipServidor;
     private int porta;
 
-    private static final String IP_SERVIDOR = "127.0.0.1";
-    private static final int PORTA_SERVIDOR = 5000;
+    private static final String IP_SERVIDOR = "192.168.24.236";
+    private static final int PORTA_SERVIDOR = 8080;
 
     public CalculadoraCliente() {
         this.ipServidor = IP_SERVIDOR;
         this.porta = PORTA_SERVIDOR;
+        try {
+            this.cliente = new Socket(this.ipServidor, this.porta);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String enviarExpressao(String exp) {
@@ -25,9 +30,16 @@ public class CalculadoraCliente {
         return enviarConta(exp);
     }
 
+    public void encerrarConexao() {
+        try {
+            this.cliente.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private String enviarConta(String valores) {
         try {
-            this.cliente = new Socket(this.ipServidor, this.porta);
             ObjectOutputStream outputStream = new ObjectOutputStream(this.cliente.getOutputStream());
             outputStream.writeObject(valores);
             ObjectInputStream entrada = new ObjectInputStream(cliente.getInputStream());
@@ -37,10 +49,10 @@ public class CalculadoraCliente {
                 sb.append("\nResultado: ").append((String) obj);
                 return sb.toString();
             } catch (ClassNotFoundException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return "";
     }

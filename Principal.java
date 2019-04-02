@@ -15,6 +15,7 @@ public class Principal {
             System.out.print("\n\nInforme a expressao ou <0> para sair:");
             exp = sc.next();
             if (exp.equals("0")) {
+                this.calculadoraCliente.encerrarConexao();
                 System.exit(0);
             } else {
                 System.out.println(this.calculadoraCliente.enviarExpressao(exp));
